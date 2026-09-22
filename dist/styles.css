@@ -824,6 +824,40 @@ footer p:last-child {
   }
 }
 
+@media (min-width: 601px) and (max-width: 900px) {
+  .hero {
+    min-height: 100svh;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 1.5rem;
+    padding: 8rem 0 5rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(3.3rem, 7.1vw, 4.5rem);
+    line-height: 0.94;
+  }
+
+  .hero-object {
+    min-height: 0;
+  }
+
+  .stage {
+    width: min(100%, 21rem);
+  }
+}
+
+@media (min-width: 601px) and (max-width: 700px) {
+  .core-label {
+    gap: 0.4rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+  }
+
+  .core-divider {
+    width: 1.25rem;
+  }
+}
+
 @media (max-width: 600px) {
   .site-header {
     top: 0.7rem;
