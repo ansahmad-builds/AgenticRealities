@@ -814,6 +814,7 @@ footer p:last-child {
     align-items: flex-start;
     flex-direction: column;
     justify-content: center;
+    padding-inline: 1rem;
   }
 
   .closing-orb {
@@ -938,6 +939,10 @@ footer p:last-child {
     line-height: 1.08;
   }
 
+  .closing h2 {
+    font-size: clamp(2.1rem, 8.5vw, 3rem);
+  }
+
   .statement > p {
     margin-top: 1.5rem;
     line-height: 1.65;
@@ -955,6 +960,7 @@ footer p:last-child {
   .closing {
     min-height: 31rem;
     justify-content: flex-start;
+    padding-inline: 1rem;
   }
 
   .closing-glow {
