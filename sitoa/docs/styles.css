@@ -74,15 +74,6 @@ h2 { font-size: clamp(2.4rem, 4.1vw, 3.9rem); line-height: 1.12; }
 .use-grid h3 { font-size: 1.65rem; }
 .use-grid article > p:not(.use-number) { margin-top: 1rem; color: var(--muted); font-size: 1rem; line-height: 1.7; }
 .use-grid article > .example-prompt { color: #d1dddb; }
-.trust-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem 4rem; margin-top: 3rem; }
-.trust-grid h3 { font-size: 1.3rem; line-height: 1.4; }
-.trust-grid p { margin-top: 0.8rem; color: var(--muted); font-size: 1rem; line-height: 1.7; }
-.status-section { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 4rem; }
-.status-section h2 { font-size: clamp(2.3rem, 3.5vw, 3.4rem); }
-.status-detail h3 { font-size: 1.15rem; line-height: 1.4; }
-.status-detail p { margin-top: 1rem; color: var(--muted); font-size: 1rem; line-height: 1.75; }
-.planned { margin-top: 1.6rem; padding-top: 1.6rem; border-top: 1px solid var(--line); }
-.status-detail .status-footnote { font-size: 0.875rem; }
 footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.2rem; min-height: 7rem; padding-block: 2rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.8125rem; line-height: 1.6; }
 footer .brand { color: var(--text); font-size: 1rem; }
 @media (max-width: 1050px) {
@@ -113,9 +104,7 @@ footer .brand { color: var(--text); font-size: 1rem; }
   .glass-card h3 { margin-top: 1.5rem; }
   .glass-card p { margin-top: 1rem; }
   .workflow { gap: 2rem 1.5rem; }
-  .use-grid, .trust-grid, .status-section { grid-template-columns: 1fr; gap: 2rem; }
-  .use-grid { gap: 0; }
-  .status-section h2 { font-size: clamp(2.15rem, 6.2vw, 3rem); }
+  .use-grid { grid-template-columns: 1fr; gap: 0; }
   footer { align-items: flex-start; flex-direction: column; }
 }
 @media (max-width: 480px) {
@@ -126,7 +115,7 @@ footer .brand { color: var(--text); font-size: 1rem; }
   .hero { padding-top: 3rem; }
   .eyebrow { font-size: 0.75rem; letter-spacing: 0.09em; }
   h1 { font-size: clamp(2.6rem, 11vw, 3.6rem); }
-  h2, .status-section h2 { font-size: clamp(2rem, 8vw, 2.4rem); }
+  h2 { font-size: clamp(2rem, 8vw, 2.4rem); }
   figcaption, .decision-trail { padding: 1rem 1.2rem; }
   .example-question { padding: 1.2rem 1.2rem 0; }
   .example-answer { padding: 1.2rem; }
