@@ -50,6 +50,14 @@ Next account-level steps:
 
 ## Analytics and legal boundary
 
+## Published verification
+
+All four GitHub deployments completed successfully. Fresh live browser checks returned HTTPS 200 responses over TLS 1.3, correct canonical URLs, available robots/sitemap/ownership-key files, disabled analytics, and zero pre-consent third-party requests. `https://www.agenticrealities.com/` returned a permanent redirect to the canonical apex, and `/privacy/` returned 200.
+
+IndexNow accepted each of the four home-page notifications with HTTP 202. This means initial key verification/notification was queued; it does not prove indexing, ranking, or inclusion in an AI response. Google Search Console and Bing Webmaster account verification remain owner-side tasks.
+
+## Analytics and legal boundary
+
 Consent tests used a synthetic ID and intercepted Google requests locally; they sent no real analytics events. Verified: activation gate, no Google requests before consent, rejection persisted on reload, explicit acceptance loaded the mocked tag once, advertising consent stayed denied, withdrawal unloaded the tag and blocked it on reload, expired consent prompted again, and Global Privacy Control blocked analytics. All four disabled home pages made zero third-party requests in the checked browser runs.
 
 Tracking remains disabled pending the full legal controller identity, public privacy-contact email, an accurate activated-analytics notice, review of Google's processing/transfer arrangements, retention, enhanced measurement/data sharing, and actual account-level verification. The current published privacy information transparently explains this. See [analytics activation checklist](analytics-setup.md). The website must not claim to collect no personal data: GitHub Pages logs visitor IPs for hosting security.
