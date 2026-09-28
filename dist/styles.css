@@ -507,14 +507,16 @@ h2 span {
 .principle-grid {
   display: grid;
   margin-top: 5rem;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
 
 .principle-card {
   position: relative;
   display: grid;
+  min-width: 0;
   min-height: 28rem;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto minmax(8rem, 1fr) auto auto;
   padding: 1.4rem;
   overflow: hidden;
@@ -564,7 +566,9 @@ h2 span {
   align-self: center;
   justify-self: center;
   width: 9rem;
-  height: 9rem;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 1;
 }
 
 .icon-context span {
@@ -858,7 +862,7 @@ footer p:last-child {
 
   .card-icon {
     width: 8rem;
-    height: 8rem;
+    height: auto;
   }
 
   .closing {
