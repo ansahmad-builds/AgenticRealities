@@ -48,8 +48,6 @@ Next account-level steps:
 4. Use `node scripts/notify-indexnow.cjs` after successful publication to notify participating engines. An HTTP 200/202 acknowledges a notification/verification queue; it is not proof of indexing or ranking, and it is not Google Search Console submission.
 5. Build relevant, original project documentation and earn genuine references as projects develop. Do not manufacture backlinks, reviews, keyword pages, or unsupported performance claims. Use Search Console/Bing reports to assess actual impressions and queries over time.
 
-## Analytics and legal boundary
-
 ## Published verification
 
 All four GitHub deployments completed successfully. Fresh live browser checks returned HTTPS 200 responses over TLS 1.3, correct canonical URLs, available robots/sitemap/ownership-key files, disabled analytics, and zero pre-consent third-party requests. `https://www.agenticrealities.com/` returned a permanent redirect to the canonical apex, and `/privacy/` returned 200.
