@@ -21,7 +21,7 @@ if (prefersReducedMotion || !("IntersectionObserver" in window)) {
   revealItems.forEach((item) => revealObserver.observe(item));
 }
 
-if (!prefersReducedMotion) {
+if (!prefersReducedMotion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
   window.addEventListener(
     "pointermove",
     (event) => {
