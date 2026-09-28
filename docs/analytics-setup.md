@@ -2,7 +2,7 @@
 
 Measurement ID supplied by the owner: `G-RQ2C8DV5F3`.
 
-Tracking is deliberately **disabled** in all four `analytics-config.js` files (`noticeApproved: false`). No Google tag or cookieless measurement ping is loaded in this state. The complete prospective privacy notice and consent-only integration are prepared; activation requires explicit owner approval.
+The owner explicitly approved consent-only activation on all four sites on 29 September 2026, after the completed prospective notice was published and local tests passed. All four `analytics-config.js` files now use `noticeApproved: true`, with version `2026-09-29-active`. This enables the choice interface, not default tracking: no Google tag or cookieless measurement ping loads without affirmative visitor consent.
 
 ## Owner confirmations — 29 September 2026
 
@@ -11,10 +11,11 @@ Tracking is deliberately **disabled** in all four `analytics-config.js` files (`
 - `G-RQ2C8DV5F3` is the correct owner-supplied measurement ID.
 - The owner confirmed completion of the recommended account-settings checklist, then confirmed granular location/device collection and advertising-personalization changes are off. Account settings and legal/transfer terms have not been independently inspected through account access. The screenshot only supported some collection settings; retention/sharing/terms rely on the owner's checklist confirmation.
 - A safety review rejected activation while the notice was unfinished and explicit activation authority was unclear. Do not bypass that rejection. Publish the notice and verified improvements with the gate off; obtain explicit permission before enabling all four sites.
+- The notice and disabled-state improvements were then published and verified live on all four HTTPS domains. The owner subsequently selected **Approve consent-only activation**, resolving the activation-authority blocker. No Google legal terms or user-data acknowledgement have been accepted on the owner's behalf.
 
-## Required before activation
+## Configuration to maintain and recheck before future changes
 
-1. Publish the prospective privacy notice using the owner's supplied identity and monitored email. Ensure the operator identity is accurate and identifiable; initials alone have not been legally certified as sufficient.
+1. Maintain the privacy notice using the owner's supplied identity and monitored email. Ensure the operator identity is accurate and identifiable; initials alone have not been legally certified as sufficient.
 2. Confirm this GA4 ID belongs to the owner's account and covers these sites. Review/accept the appropriate Google Analytics processing terms in that account; assess recipients and transfers, including applicable safeguards. Cookie consent is not by itself GDPR compliance.
 3. Set event-data retention to the chosen disclosed duration (prefer the minimum appropriate setting). Turn off Google signals, advertising personalization, advertising products, user IDs, and unnecessary data sharing. Turn off automatic enhanced-measurement events until their payloads, URLs, and consent behavior have been reviewed. The integration manually sends a sanitized page view; queries and fragments are omitted, referrers are reduced to origins.
 4. Publish the specific purposes, consent basis, recipients, real retention settings, transfer arrangements, cookie durations, withdrawal process, data-subject rights, contact details, and complaint route. Document the operator's assessment; obtain qualified legal review where needed.

@@ -22,12 +22,21 @@ const version = "consent-regression-v2";
       const gateRequests = [];
       gatePage.on("request", request => { if (!request.url().startsWith(base)) gateRequests.push(request.url()); });
       await gatePage.goto(base, { waitUntil: "networkidle" });
-      assert.equal(await gatePage.evaluate(() => window.AR_ANALYTICS_CONFIG.noticeApproved), false);
-      assert.equal(await gatePage.locator("#analytics-banner").isVisible(), false);
+      assert.equal(await gatePage.evaluate(() => window.AR_ANALYTICS_CONFIG.noticeApproved), true);
+      assert.equal(await gatePage.locator("#analytics-banner").isVisible(), true);
+      await gatePage.locator('#analytics-banner [data-choice="denied"]').click();
       await gatePage.locator("[data-analytics-settings]").click();
-      assert.equal(await gatePage.locator("#analytics-allow").isVisible(), false);
-      assert.deepEqual(gateRequests, [], `${name}: production activation gate must block Google`);
+      assert.equal(await gatePage.locator("#analytics-allow").isVisible(), true);
+      assert.deepEqual(gateRequests, [], `${name}: production consent gate must block Google before acceptance`);
       await gate.close();
+
+      const disabled = await fixture(browser, base, { ready: false });
+      await disabled.page.goto(base, { waitUntil: "networkidle" });
+      assert.equal(await disabled.page.locator("#analytics-banner").isVisible(), false);
+      await disabled.page.locator("[data-analytics-settings]").click();
+      assert.equal(await disabled.page.locator("#analytics-allow").isVisible(), false);
+      assert.deepEqual(disabled.requests, []);
+      await disabled.context.close();
 
       const { context, page, requests } = await fixture(browser, base);
       const dirtyUrl = base + "?email=synthetic@example.invalid&token=not-a-real-secret#private-fragment";
@@ -66,7 +75,7 @@ const version = "consent-regression-v2";
       assert.equal(config.send_page_view, false);
       assert.equal(config.allow_google_signals, false);
       assert.equal(config.allow_ad_personalization_signals, false);
-      assert.equal(config.cookie_domain, "127.0.0.1");
+      assert.equal(config.cookie_domain, "none");
       assert.equal(config.cookie_expires, 180 * 24 * 60 * 60);
       assert.equal(config.cookie_update, false);
       for (const args of queued.filter(args => args[0] === "consent")) {
@@ -106,7 +115,7 @@ const version = "consent-regression-v2";
       assert.equal(await unavailable.page.locator("#analytics-banner").isVisible(), true);
       assert.equal(unavailable.requests.length, 1);
       await unavailable.context.close();
-      console.log(JSON.stringify({ site: name, consent: "passed (mocked Google tag)", scenarios: ["production gate", "pre-consent silence", "6 banner layouts", "axe", "persistent reject/accept", "sanitized automatic-event defaults", "ads denied", "withdrawal clears cookies", "expiry/version", "GPC/DNT", "storage unavailable"] }));
+      console.log(JSON.stringify({ site: name, consent: "passed (mocked Google tag)", scenarios: ["production consent gate", "disabled fixture", "pre-consent silence", "6 banner layouts", "axe", "persistent reject/accept", "sanitized automatic-event defaults", "ads denied", "withdrawal clears cookies", "expiry/version", "GPC/DNT", "storage unavailable"] }));
     }
     const privacy = await browser.newPage();
     await privacy.goto("http://127.0.0.1:43120/privacy/", { waitUntil: "networkidle" });
@@ -134,7 +143,7 @@ async function fixture(browser, base, options = {}) {
     if (signal === "dnt") Object.defineProperty(navigator, "doNotTrack", { get: () => "1" });
     if (storageUnavailable) Object.defineProperty(window, "localStorage", { get() { throw new DOMException("Storage unavailable", "SecurityError"); } });
   }, options);
-  await context.route("**/analytics-config.js", route => route.fulfill({ contentType: "application/javascript", body: `window.AR_ANALYTICS_CONFIG = ${JSON.stringify({ measurementId: testId, noticeApproved: true, noticeVersion: version, privacyUrl: "https://agenticrealities.com/privacy/" })};` }));
+  await context.route("**/analytics-config.js", route => route.fulfill({ contentType: "application/javascript", body: `window.AR_ANALYTICS_CONFIG = ${JSON.stringify({ measurementId: testId, noticeApproved: options.ready !== false, noticeVersion: version, privacyUrl: "https://agenticrealities.com/privacy/" })};` }));
   const requests = [];
   await context.route(/https:\/\/[^/]*(google|analytics)[^/]*\//, route => {
     requests.push(route.request().url());

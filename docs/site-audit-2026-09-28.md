@@ -2,7 +2,7 @@
 
 Scope: Agentic Realities, Sitoa, Kairos, and Bongaus public informational sites. This is a front-end, technical SEO, performance, and consent-implementation audit—not an exhaustive security penetration test or a GDPR certification.
 
-Follow-up: [29 September analytics readiness](analytics-readiness-2026-09-29.md) records the supplied operator/contact details, owner-confirmed settings, completed prospective notice, and additional consent checks. The gate remains off pending explicit activation approval; the disabled-state findings below describe the original audit.
+Follow-up: [29 September analytics readiness and activation](analytics-readiness-2026-09-29.md) records the supplied operator/contact details, owner-confirmed settings, published notice, explicit activation approval, and additional consent checks. The disabled-state findings below describe the original audit; the later setup loads Google only after visitor acceptance.
 
 ## Changes made
 
