@@ -25,6 +25,14 @@ The owner then explicitly selected **Approve consent-only activation** on all fo
 
 Synthetic tests do not prove Google's actual tag/event payloads, account processing settings, legal sufficiency, or receipt in GA Realtime/DebugView. `scripts/check-real-analytics.cjs` adds actual Google-tag payload/cookie checks while intercepting measurement requests locally before transmission. Dashboard receipt still requires the owner's account access and a deliberately consented visit. If actual behavior differs, disable collection and correct it.
 
+## Published activation verification
+
+Activation commit `557e0bf7f260b2f16e2b61fe9782dde4ef5c642b` deployed successfully on the main site. Project deployments also succeeded: Sitoa `44b9a1f553350e4b9ca289d79ee4ac00be1aba1e`, Kairos `00812ff0f933a3d3b48728a97b5f5320cc5129b9`, and Bongaus `fed8922cb692fdd8979afa67ce98903b139659e4`.
+
+Fresh public-browser checks verified HTTPS 200 over TLS 1.3 on all four domains, the active notice version, the choice banner, persistent rejection with zero third-party requests, and an accessible preferences route back to acceptance. The live privacy page contains the supplied operator name/email, retention, host-only cookie scope, rights, transfer information, and accurate consent-only status.
+
+Actual Google-tag tests were also repeated on the four public HTTPS domains. Each produced one sanitized page view to the supplied ID after deliberate test acceptance, with advertising-personalization denial. Cookies were host-only, Secure, SameSite=Lax, and within the 180-day expiry cap. No Google requests occurred before acceptance or after rejection/withdrawal, and withdrawal removed accessible Analytics cookies. Measurement endpoints were intercepted before transmission: these tests did not create report data or prove receipt in the owner's dashboard. To check receipt, deliberately accept analytics on a normal visit and inspect [Reports → Realtime](https://support.google.com/analytics/answer/9271392).
+
 ## Primary references
 
 - [Google retention controls](https://support.google.com/analytics/answer/7667196)

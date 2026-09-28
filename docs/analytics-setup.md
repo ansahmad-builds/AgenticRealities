@@ -29,7 +29,7 @@ The owner explicitly approved consent-only activation on all four sites on 29 Se
 - Footer preferences, native keyboard-accessible dialog, and withdrawal.
 - Consent stored per origin for up to 180 days, versioned. Local-storage failure does not grant consent on the next page. Global Privacy Control and Do Not Track keep analytics disabled.
 - All advertising consent denied; no advertising or remarketing tags. No cross-site consent cookie or cross-domain linker.
-- Sanitized URL/referrer defaults are applied globally and in the property config as well as the manual page view, including automatic events. HTTPS analytics cookies use Secure and SameSite=Lax; cookie expiry is capped at 180 days without rolling renewal.
+- Sanitized URL/referrer defaults are applied globally and in the property config as well as the manual page view, including automatic events. Analytics cookies are host-only (`cookie_domain: "none"`); HTTPS uses Secure and SameSite=Lax. Cookie expiry is capped at 180 days without rolling renewal.
 - Each site is self-contained; shared analytics assets must remain identical across `dist`, `sitoa/docs`, `kairos/docs`, and `bongaus/docs`.
 
 Consent preferences are operational privacy settings, not an analytics identifier. GitHub Pages separately logs visitor IPs for security; its hosting processing is disclosed. The websites do not claim they collect no personal data, because hosting requests exist.
