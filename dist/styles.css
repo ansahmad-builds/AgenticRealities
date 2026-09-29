@@ -266,43 +266,6 @@ h2 span {
   line-height: 1.75;
 }
 
-.primary-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 1.5rem;
-  margin-top: 2rem;
-  padding: 0.9rem 1rem 0.9rem 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.08);
-  font-size: 1rem;
-  backdrop-filter: blur(12px);
-  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
-}
-
-.primary-link span {
-  display: grid;
-  width: 1.9rem;
-  height: 1.9rem;
-  place-items: center;
-  border-radius: 50%;
-  background: white;
-  color: black;
-  transition: transform 180ms ease;
-}
-
-.primary-link:hover,
-.primary-link:focus-visible {
-  border-color: rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
-}
-
-.primary-link:hover span {
-  transform: translateY(2px);
-}
-
 .hero-object {
   display: grid;
   min-height: 34rem;
@@ -513,7 +476,7 @@ h2 span {
   min-width: 0;
   min-height: 28rem;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(8rem, 1fr) auto auto;
+  grid-template-rows: minmax(8rem, 1fr) auto auto;
   padding: 1.4rem;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -528,13 +491,6 @@ h2 span {
   border-color: rgba(255, 255, 255, 0.2);
   background: linear-gradient(150deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025));
   transform: translateY(-6px);
-}
-
-.card-number {
-  display: block;
-  color: var(--muted);
-  font-size: 0.8125rem;
-  letter-spacing: 0.12em;
 }
 
 .principle-card h3 {
@@ -685,12 +641,11 @@ h2 span {
 .project-link { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--line-soft); font-size: 0.875rem; line-height: 1.6; }
 .project-link > span { color: var(--project-accent); }
 .hero h1 { max-width: none; }
-.primary-link { max-width: 100%; flex-wrap: wrap; }
 
 footer {
   display: grid;
   min-height: 8rem;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: center;
   gap: 0.75rem 1rem;
   padding-block: 1.5rem;
@@ -741,10 +696,6 @@ footer .footer-copyright {
 
 .reveal-delay-2 {
   transition-delay: 180ms;
-}
-
-.reveal-delay-3 {
-  transition-delay: 270ms;
 }
 
 @keyframes pulse {
@@ -803,14 +754,6 @@ footer .footer-copyright {
   .card-icon {
     width: 8rem;
     height: auto;
-  }
-
-  footer {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  footer .footer-tagline {
-    display: none;
   }
 }
 
@@ -898,10 +841,6 @@ footer .footer-copyright {
   .hero-intro {
     margin-top: 1.5rem;
     line-height: 1.65;
-  }
-
-  .primary-link {
-    margin-top: 1.5rem;
   }
 
   .hero-object {

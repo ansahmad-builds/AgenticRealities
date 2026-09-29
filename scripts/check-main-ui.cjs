@@ -15,7 +15,7 @@ const screenshotDirectory = process.env.SCREENSHOT_DIRECTORY;
   try {
     if (screenshotDirectory) fs.mkdirSync(screenshotDirectory, { recursive: true });
     for (const textScale of [100, 200]) {
-      for (const width of [320, 375, 390, 527, 570, 600, 601, 768, 836, 1024, 1061, 1440]) {
+      for (const width of [320, 375, 390, 527, 570, 600, 601, 768, 836, 945, 1024, 1061, 1440]) {
         const page = await browser.newPage({ viewport: { width, height: 668 }, reducedMotion: "reduce" });
         try {
           const failures = [];
@@ -42,6 +42,7 @@ const screenshotDirectory = process.env.SCREENSHOT_DIRECTORY;
               footerGap: footer.top - projects.bottom,
               finalSection: document.querySelector("main").lastElementChild.id,
               removedSectionCount: document.querySelectorAll(".closing, #closing-title, .closing-orb").length,
+              footerTaglines: document.querySelectorAll(".footer-tagline").length,
               logos, favicon: document.querySelector("link[rel='icon']").href,
               horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
               footerOverflow: [...document.querySelectorAll("footer a, footer p, footer button")].filter(el => {
@@ -57,6 +58,7 @@ const screenshotDirectory = process.env.SCREENSHOT_DIRECTORY;
           assert.ok(Math.abs(result.footerGap) < 1, "Footer follows projects without a leftover empty section");
           assert.equal(result.finalSection, "projects", "Projects is the final content section");
           assert.equal(result.removedSectionCount, 0, "Closing headline and orb are removed");
+          assert.equal(result.footerTaglines, 0, "Footer tagline is removed rather than hidden");
           assert.equal(result.logos.length, 2, "Header and footer both show the shared logo");
           for (const logo of result.logos) {
             assert.equal(logo.src, result.favicon, "Brand marks use the favicon asset");

@@ -7,7 +7,7 @@ const axePath = require.resolve("../.sites-runtime/audit/node_modules/axe-core/a
 const base = process.env.MAIN_UI_URL || "http://127.0.0.1:43120/";
 const screenshotDirectory = process.env.SCREENSHOT_DIRECTORY;
 const storageKey = "ar-theme-v1";
-const sizes = [[320,698],[375,812],[390,844],[527,698],[570,668],[600,698],[601,698],[568,320],[836,698],[1024,768],[1061,884],[1440,900]];
+const sizes = [[320,698],[375,812],[390,844],[527,698],[570,668],[600,698],[601,698],[568,320],[836,698],[945,884],[1024,768],[1061,884],[1440,900]];
 
 (async () => {
   const browser = await chromium.launch({ headless: true, executablePath: process.env.BROWSER_EXECUTABLE });
@@ -33,11 +33,20 @@ const sizes = [[320,698],[375,812],[390,844],[527,698],[570,668],[600,698],[601,
             const toggleBox = await toggle.boundingBox();
             assert.ok(toggleBox.width >= 44 && toggleBox.height >= 44, "44px touch target");
             await inspectLayout(page);
-            if (!pagePath) await inspectPageEnding(page);
+            if (!pagePath) {
+              await inspectPageEnding(page);
+              await inspectMainCopy(page);
+            }
             const reject = page.getByRole("button", { name: "Reject analytics", exact: true });
             if (await reject.isVisible()) await reject.click();
-            if (screenshotDirectory && [390,570,1061,1440].includes(width) && height !== 320) {
+            if (screenshotDirectory && [390,570,945,1061,1440].includes(width) && height !== 320) {
               await page.screenshot({ path: path.join(screenshotDirectory, `${pagePath ? "privacy" : "main"}-${theme}-${width}.png`) });
+            }
+            if (screenshotDirectory && !pagePath && [390,945,1440].includes(width)) {
+              await page.locator("#vision").scrollIntoViewIfNeeded();
+              await page.screenshot({ path: path.join(screenshotDirectory, `vision-${theme}-${width}.png`) });
+              await page.locator("#principles").scrollIntoViewIfNeeded();
+              await page.screenshot({ path: path.join(screenshotDirectory, `principles-${theme}-${width}.png`) });
             }
             await page.evaluate(() => { document.activeElement.blur(); scrollTo(0, document.documentElement.scrollHeight); });
             const afterScroll = await toggle.boundingBox();
@@ -127,9 +136,17 @@ async function inspectLayout(page) {
       const rect = el.getBoundingClientRect();
       return rect.width && (rect.left < -1 || rect.right > innerWidth + 1 || el.scrollWidth > el.clientWidth + 2);
     }).map(el => el.textContent.trim().slice(0, 50));
-    return { overflow, documentOverflow: document.documentElement.scrollWidth > innerWidth };
+    const cardOverlap = [...document.querySelectorAll(".principle-card")].filter(card => {
+      const bounds = card.getBoundingClientRect();
+      const icon = card.querySelector(".card-icon").getBoundingClientRect();
+      const heading = card.querySelector("h3").getBoundingClientRect();
+      const paragraph = card.querySelector("p").getBoundingClientRect();
+      return icon.top < bounds.top || icon.bottom > heading.top + 1 || heading.bottom > paragraph.top + 1 || paragraph.bottom > bounds.bottom + 1;
+    }).map(card => card.querySelector("h3").textContent);
+    return { overflow, cardOverlap, documentOverflow: document.documentElement.scrollWidth > innerWidth };
   });
   assert.deepEqual(result.overflow, [], `Content fits at ${JSON.stringify(page.viewportSize())}`);
+  assert.deepEqual(result.cardOverlap, [], "Principle icons, headings, and descriptions stay within their cards without overlap");
   assert.equal(result.documentOverflow, false);
 }
 
@@ -137,6 +154,25 @@ async function inspectPageEnding(page) {
   assert.equal(await page.locator(".closing, #closing-title, .closing-orb").count(), 0, "Removed closing section stays absent in both themes");
   assert.equal(await page.locator("main > section:last-child").getAttribute("id"), "projects", "Projects is the final content section");
   assert.equal(await page.locator("main + footer").count(), 1, "Footer follows the main content directly");
+}
+
+async function inspectMainCopy(page) {
+  assert.equal(await page.locator(".card-number, .primary-link, .footer-tagline").count(), 0, "Removed numbering, hero button, and footer tagline stay absent");
+  assert.deepEqual(await page.locator(".section-index").allTextContents(), ["Our vision", "Principles", "Projects"]);
+  assert.deepEqual(await page.locator(".principle-card h3").allTextContents(), ["Grounded in context", "Action with intent", "Clear by design"]);
+  assert.equal((await page.locator(".hero .eyebrow").textContent()).trim(), "AI for real workflows");
+  assert.match(await page.locator(".hero-intro").innerText(), /Agentic Realities creates AI software/);
+  const metadata = await page.evaluate(() => ({
+    title: document.title,
+    socialTitles: [...document.querySelectorAll('meta[property="og:title"], meta[name="twitter:title"]')].map(meta => meta.content),
+    descriptions: [...document.querySelectorAll('meta[name="description"], meta[property="og:description"], meta[name="twitter:description"]')].map(meta => meta.content),
+    graph: JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent)["@graph"],
+  }));
+  assert.equal(metadata.title, "Agentic Realities — Purpose-built AI software");
+  assert.deepEqual(metadata.socialTitles, [metadata.title, metadata.title]);
+  assert.ok(metadata.descriptions.every(description => description === metadata.descriptions[0]));
+  assert.equal(metadata.graph.find(item => item["@type"] === "WebPage").name, metadata.title);
+  assert.equal(metadata.graph.find(item => item["@type"] === "ItemList").itemListElement.length, 3);
 }
 
 async function inspectAccessibility(page, description) {
