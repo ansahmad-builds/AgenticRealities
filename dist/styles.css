@@ -109,15 +109,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 }
 
 .brand-mark {
-  display: grid;
+  display: block;
+  flex: 0 0 auto;
   width: 2rem;
   height: 2rem;
-  place-items: center;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 0.7rem;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
-  font-size: 0.78rem;
+  border-radius: 25%;
 }
 
 nav {
@@ -724,6 +721,7 @@ h2 span {
 .closing-orb {
   position: relative;
   flex: 0 0 clamp(12rem, 24vw, 19rem);
+  margin-inline-end: 1.5rem;
   aspect-ratio: 1;
   border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: 50%;
@@ -752,8 +750,10 @@ h2 span {
 footer {
   display: grid;
   min-height: 8rem;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: center;
+  gap: 0.75rem 1rem;
+  padding-block: 1.5rem;
   border-top: 1px solid var(--line-soft);
   color: var(--muted);
   font-size: 0.875rem;
@@ -764,19 +764,24 @@ footer p {
   text-align: center;
 }
 
-footer p:last-child {
+footer .footer-copyright {
+  justify-self: end;
   text-align: right;
 }
 
 .footer-brand {
+  min-width: 0;
+  min-height: 44px;
   color: #8f8f99;
+}
+
+.footer-brand > span {
+  min-width: 0;
 }
 
 .footer-brand .brand-mark {
   width: 1.65rem;
   height: 1.65rem;
-  border-radius: 0.55rem;
-  font-size: 0.65rem;
 }
 
 .reveal {
@@ -875,9 +880,18 @@ footer p:last-child {
 
   .closing-orb {
     position: absolute;
-    right: 0;
+    right: 1.5rem;
     bottom: 2rem;
-    width: 15rem;
+    width: min(15rem, calc(100% - 3rem));
+    margin-inline-end: 0;
+  }
+
+  footer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  footer .footer-tagline {
+    display: none;
   }
 }
 
@@ -1028,26 +1042,11 @@ footer p:last-child {
   }
 
   .closing-orb {
-    right: 0;
-    bottom: 1.5rem;
-    width: 10rem;
+    width: min(10rem, calc(100% - 3rem));
   }
 
   footer {
-    display: flex;
     min-height: 9rem;
-    align-items: flex-start;
-    flex-direction: column;
-    justify-content: center;
-    gap: 1rem;
-  }
-
-  footer p:last-child {
-    text-align: left;
-  }
-
-  footer > p:nth-child(2) {
-    display: none;
   }
 
   .reveal {

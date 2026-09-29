@@ -15,7 +15,8 @@ p { margin: 1rem 0 0; color: #c5cecf; }
 .intro { font-size: 1.125rem; }
 section { padding-block: 2rem; margin-top: 1rem; border-top: 1px solid #263133; }
 a { color: var(--accent); text-underline-offset: .2em; }
-.brand { color: var(--text); font-weight: 600; text-decoration: none; }
+.brand { gap: .75rem; color: var(--text); font-weight: 600; text-decoration: none; }
+.brand-mark { flex: 0 0 auto; width: 2rem; height: 2rem; border: 1px solid rgba(255,255,255,.16); border-radius: 25%; }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .skip-link { position: fixed; z-index: 100; top: 1rem; left: 1rem; padding: .75rem 1rem; background: var(--text); color: var(--bg); transform: translateY(-200%); }
 .skip-link:focus { transform: none; }
