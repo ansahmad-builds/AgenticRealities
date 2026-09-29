@@ -1,4 +1,4 @@
-// Focused regression checks for the main site's brand, footer, and closing orb.
+// Focused regression checks for the main site's brand and projects-to-footer layout.
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const fs = require("node:fs");
 const path = require("node:path");
@@ -15,7 +15,7 @@ const screenshotDirectory = process.env.SCREENSHOT_DIRECTORY;
   try {
     if (screenshotDirectory) fs.mkdirSync(screenshotDirectory, { recursive: true });
     for (const textScale of [100, 200]) {
-      for (const width of [320, 375, 390, 527, 570, 600, 601, 768, 836, 1024, 1440]) {
+      for (const width of [320, 375, 390, 527, 570, 600, 601, 768, 836, 1024, 1061, 1440]) {
         const page = await browser.newPage({ viewport: { width, height: 668 }, reducedMotion: "reduce" });
         try {
           const failures = [];
@@ -31,17 +31,17 @@ const screenshotDirectory = process.env.SCREENSHOT_DIRECTORY;
             };
             const brand = rect(".footer-brand");
             const copyright = rect(".footer-copyright");
-            const closing = rect(".closing");
-            const orb = rect(".closing-orb");
-            const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+            const projects = rect("#projects");
+            const footer = rect("footer");
             const logos = [...document.querySelectorAll(".brand-mark")].map(img => ({
               src: img.src, loaded: img.complete && img.naturalWidth > 0, alt: img.alt,
             }));
             return {
-              brand, copyright, rootFontSize,
+              brand, copyright,
               footerRowAlignment: Math.abs((brand.top + brand.bottom) / 2 - (copyright.top + copyright.bottom) / 2),
-              rightInset: closing.right - orb.right,
-              bottomInset: closing.bottom - orb.bottom,
+              footerGap: footer.top - projects.bottom,
+              finalSection: document.querySelector("main").lastElementChild.id,
+              removedSectionCount: document.querySelectorAll(".closing, #closing-title, .closing-orb").length,
               logos, favicon: document.querySelector("link[rel='icon']").href,
               horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
               footerOverflow: [...document.querySelectorAll("footer a, footer p, footer button")].filter(el => {
@@ -54,8 +54,9 @@ const screenshotDirectory = process.env.SCREENSHOT_DIRECTORY;
           assert.deepEqual(result.footerOverflow, [], "Footer content fits");
           assert.ok(result.copyright.left > result.brand.left, "Copyright sits to the right of the brand");
           assert.ok(result.footerRowAlignment < 2, "Brand and copyright share a vertically aligned row");
-          assert.ok(result.rightInset >= result.rootFontSize * 1.5 - 1, "Closing orb has at least 1.5rem right inset");
-          if (width <= 900) assert.ok(result.bottomInset >= result.rootFontSize * 2 - 1, "Closing orb has 2rem bottom inset");
+          assert.ok(Math.abs(result.footerGap) < 1, "Footer follows projects without a leftover empty section");
+          assert.equal(result.finalSection, "projects", "Projects is the final content section");
+          assert.equal(result.removedSectionCount, 0, "Closing headline and orb are removed");
           assert.equal(result.logos.length, 2, "Header and footer both show the shared logo");
           for (const logo of result.logos) {
             assert.equal(logo.src, result.favicon, "Brand marks use the favicon asset");
@@ -68,7 +69,7 @@ const screenshotDirectory = process.env.SCREENSHOT_DIRECTORY;
             await page.evaluate(() => { document.activeElement.blur(); window.scrollTo(0, document.documentElement.scrollHeight); });
             await page.screenshot({ path: path.join(screenshotDirectory, `footer-${width}.png`) });
           }
-          console.log(JSON.stringify({ width, textScale, footerRowAlignment: result.footerRowAlignment, orbRightInset: result.rightInset, passed: true }));
+          console.log(JSON.stringify({ width, textScale, footerRowAlignment: result.footerRowAlignment, footerGap: result.footerGap, passed: true }));
         } finally {
           await page.close();
         }

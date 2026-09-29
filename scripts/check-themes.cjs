@@ -33,7 +33,7 @@ const sizes = [[320,698],[375,812],[390,844],[527,698],[570,668],[600,698],[601,
             const toggleBox = await toggle.boundingBox();
             assert.ok(toggleBox.width >= 44 && toggleBox.height >= 44, "44px touch target");
             await inspectLayout(page);
-            if (!pagePath) await inspectClosingAppearance(page);
+            if (!pagePath) await inspectPageEnding(page);
             const reject = page.getByRole("button", { name: "Reject analytics", exact: true });
             if (await reject.isVisible()) await reject.click();
             if (screenshotDirectory && [390,570,1061,1440].includes(width) && height !== 320) {
@@ -133,25 +133,10 @@ async function inspectLayout(page) {
   assert.equal(result.documentOverflow, false);
 }
 
-async function inspectClosingAppearance(page) {
-  const appearance = await page.evaluate(() => {
-    const closing = getComputedStyle(document.querySelector(".closing"));
-    const orb = getComputedStyle(document.querySelector(".closing-orb"));
-    return {
-      background: closing.backgroundColor,
-      pageBackground: getComputedStyle(document.documentElement).backgroundColor,
-      backgroundImage: closing.backgroundImage,
-      glowElements: document.querySelectorAll(".closing-glow").length,
-      orbColors: [...`${orb.backgroundImage} ${orb.boxShadow}`.matchAll(/rgba?\((\d+),\s*(\d+),\s*(\d+)/g)].map(match => match.slice(1, 4).map(Number)),
-    };
-  });
-  assert.equal(appearance.background, appearance.pageBackground, "Closing background matches the page theme");
-  assert.equal(appearance.backgroundImage, "none", "No colored wash in the closing section");
-  assert.equal(appearance.glowElements, 0, "No blurred accent glow behind the orb");
-  assert.ok(appearance.orbColors.length > 0);
-  for (const channels of appearance.orbColors) {
-    assert.ok(Math.max(...channels) - Math.min(...channels) <= 32, "Orb surfaces and shadows stay neutral");
-  }
+async function inspectPageEnding(page) {
+  assert.equal(await page.locator(".closing, #closing-title, .closing-orb").count(), 0, "Removed closing section stays absent in both themes");
+  assert.equal(await page.locator("main > section:last-child").getAttribute("id"), "projects", "Projects is the final content section");
+  assert.equal(await page.locator("main + footer").count(), 1, "Footer follows the main content directly");
 }
 
 async function inspectAccessibility(page, description) {

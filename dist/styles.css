@@ -467,8 +467,7 @@ h2 span {
 }
 
 .statement h2,
-.section-heading h2,
-.closing h2 {
+.section-heading h2 {
   font-size: clamp(2.8rem, 6vw, 6.25rem);
   line-height: 1.02;
 }
@@ -688,56 +687,6 @@ h2 span {
 .hero h1 { max-width: none; }
 .primary-link { max-width: 100%; flex-wrap: wrap; }
 
-.closing {
-  position: relative;
-  display: flex;
-  min-height: 42rem;
-  align-items: center;
-  justify-content: space-between;
-  gap: 3rem;
-  overflow: hidden;
-  border-top: 1px solid var(--line-soft);
-  background: var(--bg);
-}
-
-.closing-copy {
-  position: relative;
-  z-index: 2;
-}
-
-.closing h2 {
-  font-size: clamp(3rem, 7vw, 7.2rem);
-}
-
-.closing-orb {
-  position: relative;
-  flex: 0 0 clamp(12rem, 24vw, 19rem);
-  margin-inline-end: 1.5rem;
-  aspect-ratio: 1;
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.14), transparent 44%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.018));
-  box-shadow:
-    inset 0 1px rgba(255, 255, 255, 0.12),
-    inset -1.5rem -1.5rem 3rem rgba(0, 0, 0, 0.18),
-    0 1.5rem 3rem rgba(0, 0, 0, 0.16);
-  backdrop-filter: blur(18px);
-  animation: orb-float 7s ease-in-out infinite;
-}
-
-.closing-orb span {
-  position: absolute;
-  top: 27%;
-  right: 25%;
-  width: 0.65rem;
-  height: 0.65rem;
-  border-radius: 50%;
-  background: #e1e6eb;
-  box-shadow: 0 0 1rem rgba(255, 255, 255, 0.2);
-}
-
 footer {
   display: grid;
   min-height: 8rem;
@@ -816,11 +765,6 @@ footer .footer-copyright {
   50% { transform: translate(-50%, -50%) rotate(-5deg) translateY(-0.8rem); }
 }
 
-@keyframes orb-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-0.8rem); }
-}
-
 @media (max-width: 900px) {
   .principle-grid { grid-template-columns: 1fr; }
   .project-grid { grid-template-columns: 1fr; }
@@ -859,22 +803,6 @@ footer .footer-copyright {
   .card-icon {
     width: 8rem;
     height: auto;
-  }
-
-  .closing {
-    min-height: 36rem;
-    align-items: flex-start;
-    flex-direction: column;
-    justify-content: center;
-    padding-inline: 1rem;
-  }
-
-  .closing-orb {
-    position: absolute;
-    right: 1.5rem;
-    bottom: 2rem;
-    width: min(15rem, calc(100% - 3rem));
-    margin-inline-end: 0;
   }
 
   footer {
@@ -997,14 +925,9 @@ footer .footer-copyright {
   }
 
   .statement h2,
-  .section-heading h2,
-  .closing h2 {
+  .section-heading h2 {
     font-size: clamp(2.45rem, 10vw, 3.4rem);
     line-height: 1.08;
-  }
-
-  .closing h2 {
-    font-size: clamp(2.1rem, 8.5vw, 3rem);
   }
 
   .statement > p {
@@ -1019,16 +942,6 @@ footer .footer-copyright {
 
   .principle-card {
     min-height: 19rem;
-  }
-
-  .closing {
-    min-height: 31rem;
-    justify-content: flex-start;
-    padding-inline: 1rem;
-  }
-
-  .closing-orb {
-    width: min(10rem, calc(100% - 3rem));
   }
 
   footer {
