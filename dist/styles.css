@@ -697,6 +697,7 @@ h2 span {
   gap: 3rem;
   overflow: hidden;
   border-top: 1px solid var(--line-soft);
+  background: var(--bg);
 }
 
 .closing-copy {
@@ -708,16 +709,6 @@ h2 span {
   font-size: clamp(3rem, 7vw, 7.2rem);
 }
 
-.closing-glow {
-  position: absolute;
-  right: -16rem;
-  width: 36rem;
-  height: 36rem;
-  border-radius: 50%;
-  background: rgba(32, 131, 134, 0.2);
-  filter: blur(100px);
-}
-
 .closing-orb {
   position: relative;
   flex: 0 0 clamp(12rem, 24vw, 19rem);
@@ -726,12 +717,12 @@ h2 span {
   border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: 50%;
   background:
-    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.17), transparent 27%),
-    linear-gradient(145deg, rgba(125, 208, 202, 0.16), rgba(255, 255, 255, 0.02));
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.14), transparent 44%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.018));
   box-shadow:
-    inset -2rem -2rem 4rem rgba(19, 74, 78, 0.25),
-    0 3rem 7rem rgba(0, 0, 0, 0.35),
-    0 0 6rem rgba(74, 180, 172, 0.18);
+    inset 0 1px rgba(255, 255, 255, 0.12),
+    inset -1.5rem -1.5rem 3rem rgba(0, 0, 0, 0.18),
+    0 1.5rem 3rem rgba(0, 0, 0, 0.16);
   backdrop-filter: blur(18px);
   animation: orb-float 7s ease-in-out infinite;
 }
@@ -743,8 +734,8 @@ h2 span {
   width: 0.65rem;
   height: 0.65rem;
   border-radius: 50%;
-  background: #b5e8dc;
-  box-shadow: 0 0 1.5rem #7bcec1;
+  background: #e1e6eb;
+  box-shadow: 0 0 1rem rgba(255, 255, 255, 0.2);
 }
 
 footer {
@@ -1034,11 +1025,6 @@ footer .footer-copyright {
     min-height: 31rem;
     justify-content: flex-start;
     padding-inline: 1rem;
-  }
-
-  .closing-glow {
-    right: 0;
-    width: 100%;
   }
 
   .closing-orb {

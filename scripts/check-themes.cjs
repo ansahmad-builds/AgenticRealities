@@ -7,7 +7,7 @@ const axePath = require.resolve("../.sites-runtime/audit/node_modules/axe-core/a
 const base = process.env.MAIN_UI_URL || "http://127.0.0.1:43120/";
 const screenshotDirectory = process.env.SCREENSHOT_DIRECTORY;
 const storageKey = "ar-theme-v1";
-const sizes = [[320,698],[375,812],[390,844],[527,698],[570,668],[600,698],[601,698],[568,320],[836,698],[1024,768],[1440,900]];
+const sizes = [[320,698],[375,812],[390,844],[527,698],[570,668],[600,698],[601,698],[568,320],[836,698],[1024,768],[1061,884],[1440,900]];
 
 (async () => {
   const browser = await chromium.launch({ headless: true, executablePath: process.env.BROWSER_EXECUTABLE });
@@ -33,15 +33,16 @@ const sizes = [[320,698],[375,812],[390,844],[527,698],[570,668],[600,698],[601,
             const toggleBox = await toggle.boundingBox();
             assert.ok(toggleBox.width >= 44 && toggleBox.height >= 44, "44px touch target");
             await inspectLayout(page);
+            if (!pagePath) await inspectClosingAppearance(page);
             const reject = page.getByRole("button", { name: "Reject analytics", exact: true });
             if (await reject.isVisible()) await reject.click();
-            if (screenshotDirectory && [390,570,1440].includes(width) && height !== 320) {
+            if (screenshotDirectory && [390,570,1061,1440].includes(width) && height !== 320) {
               await page.screenshot({ path: path.join(screenshotDirectory, `${pagePath ? "privacy" : "main"}-${theme}-${width}.png`) });
             }
             await page.evaluate(() => { document.activeElement.blur(); scrollTo(0, document.documentElement.scrollHeight); });
             const afterScroll = await toggle.boundingBox();
             assert.ok(afterScroll.y >= 0 && afterScroll.y + afterScroll.height <= height, "Theme control stays on screen while scrolling");
-            if (screenshotDirectory && !pagePath && [390,570].includes(width)) {
+            if (screenshotDirectory && !pagePath && [390,570,1061].includes(width)) {
               await page.screenshot({ path: path.join(screenshotDirectory, `footer-${theme}-${width}.png`) });
             }
           }
@@ -130,6 +131,27 @@ async function inspectLayout(page) {
   });
   assert.deepEqual(result.overflow, [], `Content fits at ${JSON.stringify(page.viewportSize())}`);
   assert.equal(result.documentOverflow, false);
+}
+
+async function inspectClosingAppearance(page) {
+  const appearance = await page.evaluate(() => {
+    const closing = getComputedStyle(document.querySelector(".closing"));
+    const orb = getComputedStyle(document.querySelector(".closing-orb"));
+    return {
+      background: closing.backgroundColor,
+      pageBackground: getComputedStyle(document.documentElement).backgroundColor,
+      backgroundImage: closing.backgroundImage,
+      glowElements: document.querySelectorAll(".closing-glow").length,
+      orbColors: [...`${orb.backgroundImage} ${orb.boxShadow}`.matchAll(/rgba?\((\d+),\s*(\d+),\s*(\d+)/g)].map(match => match.slice(1, 4).map(Number)),
+    };
+  });
+  assert.equal(appearance.background, appearance.pageBackground, "Closing background matches the page theme");
+  assert.equal(appearance.backgroundImage, "none", "No colored wash in the closing section");
+  assert.equal(appearance.glowElements, 0, "No blurred accent glow behind the orb");
+  assert.ok(appearance.orbColors.length > 0);
+  for (const channels of appearance.orbColors) {
+    assert.ok(Math.max(...channels) - Math.min(...channels) <= 32, "Orb surfaces and shadows stay neutral");
+  }
 }
 
 async function inspectAccessibility(page, description) {
